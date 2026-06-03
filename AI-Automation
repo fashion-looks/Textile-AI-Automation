@@ -1,0 +1,47 @@
+from datetime import datetime
+
+def tc_followup(po_no):
+    return f"""
+Subject: Pending Fabric TC Against PO No. {po_no}
+
+Dear Sir,
+
+We have been following up for the Fabric TC against PO No. {po_no}.
+The buyer is sending reminders daily and the TC is still pending from your end.
+
+Kindly share the pending TC immediately.
+
+Thanks & Regards
+"""
+
+def fabric_weight(length_mtr, width_inch, gsm):
+    width_mtr = width_inch * 0.0254
+    weight_kg = (length_mtr * width_mtr * gsm) / 1000
+    return round(weight_kg, 2)
+
+print("=== Textile AI Automation ===")
+
+while True:
+    print("\n1. TC Follow-up Email")
+    print("2. Fabric Weight Calculator")
+    print("3. Exit")
+
+    choice = input("Select Option: ")
+
+    if choice == "1":
+        po = input("Enter PO Number: ")
+        print(tc_followup(po))
+
+    elif choice == "2":
+        length = float(input("Fabric Qty (Mtr): "))
+        width = float(input("Width (Inch): "))
+        gsm = float(input("GSM: "))
+
+        wt = fabric_weight(length, width, gsm)
+        print(f"\nEstimated Net Weight: {wt} KG")
+
+    elif choice == "3":
+        break
+
+    else:
+        print("Invalid Option")
