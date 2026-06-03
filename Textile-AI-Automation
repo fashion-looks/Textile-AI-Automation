@@ -1,0 +1,61 @@
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
+
+# Load API Key
+load_dotenv()
+
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY")
+)
+
+def generate_buyer_email(issue):
+    prompt = f"""
+    Draft a professional textile merchandising email for the following issue:
+
+    {issue}
+
+    Keep the tone professional and concise.
+    """
+
+    response = client.responses.create(
+        model="gpt-5",
+        input=prompt
+    )
+
+    return response.output_text
+
+def tc_followup(po_no):
+    issue = f"""
+    Fabric TC is pending against PO No. {po_no}.
+    Buyer is sending daily reminders.
+    Request supplier to share TC urgently.
+    """
+
+    return generate_buyer_email(issue)
+
+def fabric_issue_report(defect):
+    issue = f"""
+    Create a fabric inspection report for:
+    {defect}
+    """
+
+    return generate_buyer_email(issue)
+
+if __name__ == "__main__":
+
+    print("TEXTILE AI ASSISTANT")
+    print("1. TC Follow-up Mail")
+    print("2. Fabric Issue Report")
+
+    choice = input("Select Option: ")
+
+    if choice == "1":
+        po = input("Enter PO Number: ")
+        print("\nGenerating Email...\n")
+        print(tc_followup(po))
+
+    elif choice == "2":
+        defect = input("Enter Fabric Issue: ")
+        print("\nGenerating Report...\n")
+        print(fabric_issue_report(defect))
