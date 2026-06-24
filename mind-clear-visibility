@@ -1,0 +1,22 @@
+mind-clear-visibility/
+│
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── .github/
+│   └── workflows/
+│       └── daily_report.yml
+├── data/
+│   ├── tasks.csv
+│   ├── goals.csv
+│   └── habits.csv
+├── src/
+│   ├── dashboard.py
+│   ├── focus_engine.py
+│   ├── priority_score.py
+│   ├── report_generator.py
+│   ├── reminder.py
+│   ├── analytics.py
+│   └── utils.py
+├── reports/
+└── docs/
