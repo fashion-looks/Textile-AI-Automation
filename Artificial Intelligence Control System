@@ -1,0 +1,58 @@
+                Artificial Intelligence Control System
+
+                     ┌──────────────┐
+                     │    INPUT     │
+                     └──────────────┘
+                              │
+      ┌───────────────────────┼────────────────────────┐
+      │                       │                        │
+   User Request            Documents               API/Data
+      │                       │                        │
+      └───────────────────────┴────────────────────────┘
+                              │
+                              ▼
+                     ┌──────────────┐
+                     │ AI PROCESSING│
+                     └──────────────┘
+                              │
+     ┌──────────────────────────────────────────────────┐
+     │ • Validate Input                                 │
+     │ • Understand Context                             │
+     │ • Analyze Data                                   │
+     │ • Generate Solution                              │
+     │ • Verify Consistency                             │
+     │ • Apply Business Rules                           │
+     └──────────────────────────────────────────────────┘
+                              │
+                              ▼
+                     ┌──────────────┐
+                     │    OUTPUT    │
+                     └──────────────┘
+                              │
+     ┌──────────────────────────────────────────────────┐
+     │ • Code                                            │
+     │ • Reports                                          │
+     │ • Documentation                                    │
+     │ • Decisions                                        │
+     │ • Recommendations                                  │
+     └──────────────────────────────────────────────────┘
+                              │
+                              ▼
+                     ┌──────────────┐
+                     │  AUTOMATION  │
+                     └──────────────┘
+                              │
+     ┌──────────────────────────────────────────────────┐
+     │ • GitHub Actions                                 │
+     │ • Testing                                         │
+     │ • Deployment                                      │
+     │ • Notifications                                   │
+     │ • Monitoring                                      │
+     └──────────────────────────────────────────────────┘
+                              │
+                              ▼
+                     ┌──────────────┐
+                     │   FEEDBACK   │
+                     └──────────────┘
+                              │
+                     Improve the next cycle
