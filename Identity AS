@@ -1,0 +1,26 @@
+# AS Identity
+
+AS Identity is a version-controlled framework for organizing identity,
+documentation, and structured datasets.
+
+## Principles
+
+- Single Source of Truth
+- Separate Domain Data
+- Version Control
+- Audit History
+- Security
+- Documentation
+
+## Structure
+
+Identity
+Business
+Projects
+Finance
+Operations
+Archive
+
+## Version
+
+Current Version: v1.0.0
