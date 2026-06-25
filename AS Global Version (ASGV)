@@ -1,0 +1,15 @@
+AS Global Version (ASGV)
+
+├── Repository Engine
+├── Object Database
+├── SHA-256 Object IDs
+├── Commit Engine
+├── Branch Manager
+├── Merge Engine
+├── Diff Engine
+├── Staging Area
+├── Remote Sync Protocol
+├── Authentication
+├── CLI
+├── SDK
+└── Web Dashboard
