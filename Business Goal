@@ -1,0 +1,40 @@
+Business Goal
+      │
+      ▼
+Requirements
+(What needs to be built?)
+      │
+      ▼
+Planning
+(Issues • Project Board • Milestones)
+      │
+      ▼
+Development
+(Python • Excel • Automation)
+      │
+      ▼
+Version Control
+(Git)
+      │
+      ▼
+Repository
+(GitHub)
+      │
+      ▼
+Testing
+(Check functionality)
+      │
+      ▼
+Automation
+(GitHub Actions)
+      │
+      ▼
+Deployment
+(Server • Cloud • Desktop)
+      │
+      ▼
+Monitoring
+(Logs • Reports • Metrics)
+      │
+      ▼
+Continuous Improvement
