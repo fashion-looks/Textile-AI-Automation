@@ -1,0 +1,12 @@
+ai-thinking-system/
+├── input/
+├── processing/
+├── output/
+├── automation/
+├── monitoring/
+├── tests/
+├── docs/
+├── .github/
+│   └── workflows/
+├── README.md
+└── LICENSE
