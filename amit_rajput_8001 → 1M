@@ -1,0 +1,54 @@
+instagram-growth-system/
+│
+├── README.md
+├── LICENSE
+├── .gitignore
+│
+├── .github/
+│   └── workflows/
+│       ├── daily-kpi.yml
+│       ├── weekly-report.yml
+│       ├── content-check.yml
+│       ├── backup.yml
+│       └── release.yml
+│
+├── content/
+│   ├── calendar/
+│   ├── reel-ideas/
+│   ├── scripts/
+│   ├── captions/
+│   ├── hooks/
+│   ├── hashtags/
+│   └── thumbnails/
+│
+├── analytics/
+│   ├── reels.csv
+│   ├── followers.csv
+│   ├── engagement.csv
+│   ├── retention.csv
+│   └── reach.csv
+│
+├── dashboard/
+│   ├── dashboard.xlsx
+│   ├── weekly.md
+│   └── monthly.md
+│
+├── python/
+│   ├── analytics.py
+│   ├── report.py
+│   ├── trend.py
+│   ├── retention.py
+│   ├── hashtag.py
+│   └── backup.py
+│
+├── docs/
+│   ├── 1M_VIEWS_ROADMAP.md
+│   ├── META_POLICY.md
+│   ├── MONETIZATION.md
+│   ├── CONTENT_GUIDELINES.md
+│   └── KPI.md
+│
+└── assets/
+    ├── logos/
+    ├── fonts/
+    └── templates/
