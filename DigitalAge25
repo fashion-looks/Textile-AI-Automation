@@ -1,0 +1,16 @@
+from datetime import datetime
+
+class DigitalAge25:
+    def __init__(self, owner):
+        self.owner = owner
+
+    def status(self):
+        return {
+            "owner": self.owner,
+            "security": "Enabled",
+            "backup": "Active",
+            "last_check": datetime.now().isoformat()
+        }
+
+system = DigitalAge25("Amit Singh")
+print(system.status())
