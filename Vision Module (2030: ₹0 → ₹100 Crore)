@@ -1,0 +1,33 @@
+vision/
+├── mission/
+│   ├── mission.md
+│   ├── values.md
+│   └── vision2030.md
+│
+├── goals/
+│   ├── annual.json
+│   ├── quarterly.json
+│   ├── monthly.json
+│   └── daily.json
+│
+├── roadmap/
+│   ├── 2026.md
+│   ├── 2027.md
+│   ├── 2028.md
+│   ├── 2029.md
+│   └── 2030.md
+│
+├── api/
+│   ├── goals.py
+│   ├── roadmap.py
+│   ├── mission.py
+│   └── progress.py
+│
+├── database/
+│   ├── goals.sql
+│   ├── milestones.sql
+│   └── progress.sql
+│
+└── dashboard/
+    ├── kpi.py
+    └── vision_dashboard.py
