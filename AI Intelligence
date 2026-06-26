@@ -1,0 +1,29 @@
+Human
+   │
+   ▼
+AI Intelligence
+├── Machine Learning
+├── Computer Vision
+├── Natural Language Processing
+├── Planning
+└── Decision Making
+   │
+   ▼
+Robot Control System
+├── Motion Planning
+├── Navigation
+├── Object Manipulation
+├── Sensor Processing
+└── Safety Monitoring
+   │
+   ▼
+Physical Robot
+├── Cameras
+├── LiDAR
+├── GPS
+├── Microphones
+├── Motors
+└── Robotic Arms
+   │
+   ▼
+Environment
