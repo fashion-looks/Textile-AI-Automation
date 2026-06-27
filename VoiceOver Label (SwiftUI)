@@ -1,0 +1,11 @@
+import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        Button("Login") {
+            print("Login")
+        }
+        .accessibilityLabel("Login Button")
+        .accessibilityHint("Double tap to login")
+    }
+}
