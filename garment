@@ -1,0 +1,19 @@
+garment-enterprise/
+│
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── deploy.yml
+│       ├── tests.yml
+│       ├── security.yml
+│       ├── docker.yml
+│       ├── bi-refresh.yml
+│       ├── reports.yml
+│       └── backup.yml
+│
+├── backend/
+├── frontend/
+├── database/
+├── ai/
+├── dashboards/
+└── docker/
