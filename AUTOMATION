@@ -1,0 +1,72 @@
+TEXTILE-AI-AUTOMATION/
+│
+├── README.md
+├── LICENSE
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── .gitignore
+├── docker-compose.yml
+├── requirements.txt
+├── package.json
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── auth/
+│   │   ├── models/
+│   │   ├── database/
+│   │   ├── services/
+│   │   ├── ai/
+│   │   ├── analytics/
+│   │   └── automation/
+│   └── tests/
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── components/
+│
+├── database/
+│   ├── migrations/
+│   ├── schema.sql
+│   └── seed.sql
+│
+├── ai/
+│   ├── document-ai/
+│   ├── prediction/
+│   ├── chatbot/
+│   ├── rag/
+│   └── agents/
+│
+├── business-intelligence/
+│   ├── dashboards/
+│   ├── reports/
+│   ├── kpi/
+│   ├── forecasting/
+│   └── powerbi/
+│
+├── textile/
+│   ├── gots/
+│   ├── grs/
+│   ├── ocs/
+│   ├── tc-management/
+│   ├── audits/
+│   └── traceability/
+│
+├── automation/
+│   ├── workflows/
+│   ├── notifications/
+│   ├── scheduler/
+│   └── integrations/
+│
+├── docs/
+├── scripts/
+├── .github/
+│   ├── workflows/
+│   ├── ISSUE_TEMPLATE/
+│   └── PULL_REQUEST_TEMPLATE.md
+│
+└── infrastructure/
+    ├── docker/
+    ├── kubernetes/
+    └── terraform/
