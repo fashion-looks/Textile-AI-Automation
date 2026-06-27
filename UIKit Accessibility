@@ -1,0 +1,4 @@
+loginButton.isAccessibilityElement = true
+loginButton.accessibilityLabel = "Login"
+loginButton.accessibilityHint = "Double tap to sign in"
+loginButton.accessibilityTraits = .button
