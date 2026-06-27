@@ -1,0 +1,29 @@
+bitcoin-tool-suite/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── docker-compose.yml
+├── docs/
+├── scripts/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── security.yml
+│       └── release.yml
+│
+├── address-validator/
+├── wallet-generator/
+├── mnemonic-generator/
+├── transaction-decoder/
+├── block-explorer/
+├── blockchain-parser/
+├── bitcoin-price-api/
+├── node-monitor/
+├── mempool-dashboard/
+├── analytics-dashboard/
+├── api-server/
+├── cli/
+├── web/
+├── mobile/
+├── tests/
+└── deployment/
