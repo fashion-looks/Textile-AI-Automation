@@ -1,0 +1,28 @@
+accessibility-control/
+│
+├── docs/
+│   ├── WCAG.md
+│   ├── Accessibility-Policy.md
+│   ├── Audit-Checklist.md
+│   └── Release-Notes.md
+│
+├── src/
+│   ├── accessibility/
+│   │   ├── keyboard.ts
+│   │   ├── screenReader.ts
+│   │   ├── contrast.ts
+│   │   └── aria.ts
+│   └── app/
+│
+├── tests/
+│   ├── accessibility.test.ts
+│   └── keyboard.test.ts
+│
+├── .github/
+│   └── workflows/
+│       └── accessibility.yml
+│
+├── package.json
+├── README.md
+├── LICENSE
+└── CHANGELOG.md
