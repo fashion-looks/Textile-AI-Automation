@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080d18">
+<title>GitHub Security Center | Fashion Looks</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #080d18;
+  --panel: #111a2b;
+  --border: #293851;
+  --text: #edf4ff;
+  --muted: #99aac3;
+  --green: #37dfa0;
+  --blue: #63a6ff;
+  --red: #ff7885;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at top, #172949, var(--bg) 60%);
+  color: var(--text);
+  font-family: system-ui, Arial, sans-serif;
+  min-height: 100vh;
+}
+header {
+  padding: 22px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.logo { font-size: 19px; font-weight: 800; }
+.logo span { color: var(--green); }
+.status {
+  color: var(--green);
+  border: 1px solid #277d64;
+  border-radius: 30px;
+  padding: 7px 10px;
+  font-size: 12px;
+}
+main { max-width: 1050px; margin: auto; padding: 24px 16px; }
+h1 { font-size: clamp(26px, 5vw, 38px); margin-bottom: 8px; }
+p { color: var(--muted); line-height: 1.6; }
+.card {
+  background: rgba(17,26,43,.92);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 16px 0;
+  min-width: 0;
+}
+.label { color: var(--muted); font-size: 13px; }
+.value { font-size: 22px; font-weight: 750; overflow-wrap: anywhere; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 14px;
+}
+button {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--blue);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .18s, background .18s;
+}
+button:hover { background: #203753; }
+button:active { transform: scale(.96); }
+.primary { background: #183b37; border-color: var(--green); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+progress { width: 100%; height: 10px; accent-color: var(--green); }
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 16px 0;
+  line-height: 1.5;
+}
+.check input { width: 18px; height: 18px; accent-color: var(--green); }
+.small { font-size: 12px; color: var(--muted); }
+.warning {
+  border-color: #8a6731;
+  background: #241d12;
+}
+a { color: var(--blue); }
+footer { padding: 22px; text-align: center; color: var(--muted); }
+#message { min-height: 24px; color: var(--green); }
+@media(max-width: 520px) {
+  .grid { grid-template-columns: 1fr; }
+  header { align-items: flex-start; flex-direction: column; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🔐 Fashion Looks<span>™</span></div>
+  <div class="status">● LOCAL DASHBOARD</div>
+</header>
+
+<main>
+  <p>SECURITY CONTROL CENTER</p>
+  <h1>GitHub Protection</h1>
+  <p>Repository security, backup planning and recovery checklist.</p>
+
+  <section class="card">
+    <div class="label">GITHUB ACCOUNT</div>
+    <div class="value" id="username">amitsingh881024-ctrl</div>
+    <div class="actions">
+      <button class="primary" id="openGithub">Open GitHub Profile ↗</button>
+      <button id="copyUser">Copy Username</button>
+    </div>
+    <p class="small">This dashboard does not verify account ownership or login status.</p>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <div class="label">Security checks</div>
+      <div class="value" id="completed">0 / 6</div>
+      <p>Checklist completed</p>
+      <progress id="progress" value="0" max="6"></progress>
+    </div>
+    <div class="card">
+      <div class="label">Backup status</div>
+      <div class="value" id="backupStatus">Not verified</div>
+      <p>Confirm a real backup separately.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🛡️ Security checklist</h2>
+    <p>Tick each item only after you have completed it.</p>
+
+    <label class="check">
+      <input type="checkbox" data-item="mfa">
+      <span>Enable GitHub two-factor authentication or a passkey.</span>
+    </label>
+    <label class="check">
+      <input type="checkbox" data-item="sessions">
+      <span>Review sessions and revoke unfamiliar access.</span>
+    </label>
+    <label class="check">
+      <input type="checkbox" data-item="tokens">
+      <span>Review access tokens, SSH keys and OAuth applications.</span>
+    </label>
+    <label class="check">
+      <input type="checkbox" data-item="secrets">
+      <span>Enable secret scanning and push protection where available.</span>
+    </label>
+    <label class="check">
+      <input type="checkbox" data-item="branch">
+      <span>Protect the default branch and require code reviews.</span>
+    </label>
+    <label class="check">
+      <input type="checkbox" data-item="backup">
+      <span>Verify an independent backup can be restored.</span>
+    </label>
+
+    <div class="actions">
+      <button class="primary" id="save">Save Checklist</button>
+      <button id="reset">Reset Checklist</button>
+    </div>
+    <p id="message" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="card">
+    <h2>♻️ Recovery Center</h2>
+    <p>Use official services to investigate compromised accounts and missing repositories.</p>
+    <div class="actions">
+      <button id="accountSecurity">Account Security ↗</button>
+      <button id="support">GitHub Support ↗</button>
+      <button id="docs">Recovery Documentation ↗</button>
+    </div>
+  </section>
+
+  <section class="card warning">
+    <h2>⚠️ Security notice</h2>
+    <p>
+      This is a local checklist dashboard, not a live security scanner.
+      It cannot discover all leaked data, lock your GitHub account,
+      revoke tokens, or recover deleted cloud files automatically.
+    </p>
+    <p>Never enter passwords, recovery codes or API tokens into this page.</p>
+  </section>
+</main>
+
+<footer>Fashion Looks™ · Security & Recovery Center</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const checks = [...document.querySelectorAll('[data-item]')];
+
+function update() {
+  const count = checks.filter(c => c.checked).length;
+  $('completed').textContent = `${count} / ${checks.length}`;
+  $('progress').value = count;
+  $('backupStatus').textContent =
+    document.querySelector('[data-item="backup"]').checked
+      ? 'Marked complete' : 'Not verified';
+}
+
+checks.forEach(c => c.addEventListener('change', update));
+
+$('save').addEventListener('click', () => {
+  try {
+    const state = {};
+    checks.forEach(c => state[c.dataset.item] = c.checked);
+    localStorage.setItem('fashionLooksSecurityChecklist', JSON.stringify(state));
+    $('message').textContent = 'Checklist saved on this browser.';
+  } catch {
+    $('message').textContent = 'Could not save. Check browser storage settings.';
+  }
+});
+
+$('reset').addEventListener('click', () => {
+  checks.forEach(c => c.checked = false);
+  try { localStorage.removeItem('fashionLooksSecurityChecklist'); } catch {}
+  update();
+  $('message').textContent = 'Checklist reset.';
+});
+
+try {
+  const saved = JSON.parse(
+    localStorage.getItem('fashionLooksSecurityChecklist') || '{}'
+  );
+  checks.forEach(c => c.checked = saved[c.dataset.item] === true);
+} catch {}
+update();
+
+$('copyUser').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText('amitsingh881024-ctrl');
+    $('message').textContent = 'Username copied.';
+  } catch {
+    $('message').textContent = 'Copy unavailable. Select the username manually.';
+  }
+});
+
+function openSafe(url) {
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+$('openGithub').onclick = () =>
+  openSafe('https://github.com/amitsingh881024-ctrl');
+$('accountSecurity').onclick = () =>
+  openSafe('https://github.com/settings/security');
+$('support').onclick = () =>
+  openSafe('https://support.github.com/');
+$('docs').onclick = () =>
+  openSafe('https://docs.github.com/en/authentication/keeping-your-account-and-data-secure');
+</script>
+</body>
+</html>
