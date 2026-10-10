@@ -1,0 +1,7 @@
+name = "textile-ai-automation"
+compatibility_date = "2026-10-10"
+
+# Deploy the static dashboard from ./public.
+# Keep PHP scripts and data files outside the deployed asset directory.
+[assets]
+directory = "./public"
