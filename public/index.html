@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d18">
+  <title>Fashion Looks™ | Security Center</title>
+  <style>
+    :root{color-scheme:dark;--bg:#080d18;--panel:#111a2b;--line:#293851;--text:#edf4ff;--muted:#99aac3;--green:#37dfa0;--blue:#63a6ff}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#172949,var(--bg) 65%);color:var(--text);font:16px system-ui,Arial,sans-serif;min-height:100vh}
+    header,main,footer{max-width:960px;margin:auto;padding:22px 16px}header{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid var(--line)}
+    .brand{font-size:20px;font-weight:800}.brand span{color:var(--green)}.pill{border:1px solid #277d64;border-radius:30px;padding:7px 10px;color:var(--green);font-size:12px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0}h1{font-size:clamp(28px,6vw,42px);margin:10px 0}p{color:var(--muted);line-height:1.6}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    button{padding:12px 16px;border:1px solid var(--blue);border-radius:10px;background:transparent;color:var(--text);font-weight:700;cursor:pointer;transition:.18s}button:hover{background:#203753}button:active{transform:scale(.97)}.primary{border-color:var(--green);background:#183b37}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.check{display:flex;gap:10px;margin:15px 0;line-height:1.5}.check input{width:18px;height:18px;accent-color:var(--green)}progress{width:100%;height:10px;accent-color:var(--green)}.value{font-size:22px;font-weight:750;overflow-wrap:anywhere}
+    #message{min-height:24px;color:var(--green)}.warning{border-color:#8a6731;background:#241d12}.small{font-size:12px}a{color:var(--blue)}footer{text-align:center;font-size:13px}
+    @media(max-width:520px){header{align-items:flex-start;flex-direction:column}.card{padding:16px}}
+  </style>
+</head>
+<body>
+<header><div class="brand">🔐 Fashion Looks<span>™</span></div><div class="pill">STATIC SECURITY DASHBOARD</div></header>
+<main>
+  <p>SECURITY CONTROL CENTER</p><h1>GitHub Protection</h1>
+  <p>Repository security checklist and recovery links for <strong>amitsingh881024-ctrl</strong>.</p>
+  <section class="grid">
+    <div class="card"><p>CHECKLIST PROGRESS</p><div class="value" id="count">0 / 5</div><progress id="progress" max="5" value="0"></progress></div>
+    <div class="card"><p>BACKUP STATUS</p><div class="value" id="backup">Not verified</div><p class="small">Only mark complete after testing a restore.</p></div>
+  </section>
+  <section class="card"><h2>🛡️ Security checklist</h2>
+    <label class="check"><input type="checkbox" data-key="mfa">Enable passkey or two-factor authentication.</label>
+    <label class="check"><input type="checkbox" data-key="tokens">Review and revoke unknown tokens, SSH keys and OAuth apps.</label>
+    <label class="check"><input type="checkbox" data-key="secrets">Enable secret scanning and push protection where available.</label>
+    <label class="check"><input type="checkbox" data-key="branch">Protect the default branch and require reviews.</label>
+    <label class="check"><input type="checkbox" data-key="backup">Create and test an independent repository backup.</label>
+    <div class="actions"><button class="primary" id="save">Save checklist</button><button id="reset">Reset</button></div><p id="message" role="status" aria-live="polite"></p>
+  </section>
+  <section class="card"><h2>Recovery links</h2><div class="actions">
+    <button class="primary" onclick="window.open('https://github.com/settings/security','_blank','noopener,noreferrer')">Account security ↗</button>
+    <button onclick="window.open('https://support.github.com/','_blank','noopener,noreferrer')">GitHub Support ↗</button>
+    <button onclick="window.open('https://github.com/fashion-looks/Textile-AI-Automation/actions','_blank','noopener,noreferrer')">View Actions ↗</button>
+  </div></section>
+  <section class="card warning"><h2>Important</h2><p>This is a static dashboard. It does not scan GitHub, revoke tokens, lock accounts or recover remote files. Never enter passwords, recovery codes or API tokens here.</p></section>
+</main>
+<footer>Fashion Looks™ · Security & Recovery Center</footer>
+<script>
+const boxes=[...document.querySelectorAll('[data-key]')];
+function refresh(){const n=boxes.filter(x=>x.checked).length;document.querySelector('#count').textContent=n+' / '+boxes.length;document.querySelector('#progress').value=n;document.querySelector('#backup').textContent=document.querySelector('[data-key="backup"]').checked?'Marked complete':'Not verified'}
+try{const s=JSON.parse(localStorage.getItem('fl-security-checklist')||'{}');boxes.forEach(x=>x.checked=s[x.dataset.key]===true)}catch{}
+boxes.forEach(x=>x.addEventListener('change',refresh));refresh();
+document.querySelector('#save').addEventListener('click',()=>{try{const s={};boxes.forEach(x=>s[x.dataset.key]=x.checked);localStorage.setItem('fl-security-checklist',JSON.stringify(s));document.querySelector('#message').textContent='Saved in this browser.'}catch{document.querySelector('#message').textContent='Browser storage unavailable.'}});
+document.querySelector('#reset').addEventListener('click',()=>{boxes.forEach(x=>x.checked=false);try{localStorage.removeItem('fl-security-checklist')}catch{}refresh();document.querySelector('#message').textContent='Checklist reset.'});
+</script>
+</body>
+</html>
