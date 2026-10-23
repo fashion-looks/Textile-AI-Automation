@@ -1,0 +1,20 @@
+{
+  "name": "Fashion Looks GitHub A-Z Ecosystem",
+  "status": "roadmap-and-starter-foundation",
+  "categories": [
+    "web-development", "mobile-apps", "backend", "databases", "ai-ml",
+    "data-analysis", "automation", "web-scraping", "apis", "e-commerce",
+    "devops", "cloud-hosting", "version-control", "testing", "security",
+    "messaging-bots", "email-automation", "scheduling", "monitoring",
+    "file-management", "team-communication", "payments", "maps",
+    "iot-hardware", "game-development", "blockchain-web3",
+    "desktop-apps", "data-visualization", "ui-ux", "documentation",
+    "project-templates", "boilerplates", "ci-cd", "deployment-scripts",
+    "full-documentation"
+  ],
+  "policy": {
+    "human_approval_for_external_side_effects": true,
+    "secrets_in_source_control": false,
+    "production_deployment_enabled": false
+  }
+}
