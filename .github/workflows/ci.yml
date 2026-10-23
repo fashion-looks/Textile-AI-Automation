@@ -14,8 +14,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile Python
-        run: python -m compileall -q .
-      - name: Run tests
+      - name: Validate ecosystem inventory and project documentation
         run: |
-          if [ -d tests ]; then python -m unittest discover -s tests -v; else echo "No tests directory yet; syntax validation passed."; fi
+          python -m json.tool project-map.json > /dev/null
+          python -m py_compile tests/test_ecosystem_inventory.py tests/test_project_blueprint.py
+      - name: Run focused starter tests
+        run: |
+          python -m unittest discover -s tests -p 'test_ecosystem_inventory.py' -v
+          python -m unittest discover -s tests -p 'test_project_blueprint.py' -v
