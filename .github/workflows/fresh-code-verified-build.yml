@@ -1,0 +1,65 @@
+name: Fresh Code — Verified Build
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "adlc/**"
+      - ".github/workflows/fresh-code-verified-build.yml"
+      - ".github/PULL_REQUEST_TEMPLATE.md"
+      - "ENGINEERING_STANDARD.md"
+  pull_request:
+    paths:
+      - "adlc/**"
+      - ".github/workflows/fresh-code-verified-build.yml"
+      - ".github/PULL_REQUEST_TEMPLATE.md"
+      - "ENGINEERING_STANDARD.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: fresh-code-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify-adlc:
+    name: Verify ADLC frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate required files
+        run: |
+          test -s adlc/index.html
+          test -s adlc/README.md
+          test -s ENGINEERING_STANDARD.md
+      - name: Validate required UI and JavaScript syntax
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const html = readFileSync('adlc/index.html', 'utf8');
+          const required = [
+            'ADLC orchestration pipeline',
+            'SDLC vs ADLC',
+            'Agent task board',
+            'Production readiness checklist',
+            'Export JSON'
+          ];
+          const missing = required.filter((item) => !html.includes(item));
+          if (missing.length) throw new Error('Missing UI sections: ' + missing.join(', '));
+          const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)];
+          if (scripts.length !== 1) throw new Error('Expected exactly one inline application script.');
+          writeFileSync('/tmp/adlc-app.js', scripts[0][1]);
+          console.log('Required UI sections and script block verified.');
+          NODE
+          node --check /tmp/adlc-app.js
+      - name: Check for obvious hard-coded secrets
+        run: |
+          if grep -nEi '(api[_-]?key|secret|password|private[_-]?key)[[:space:]]*[:=][[:space:]]*["\x27][A-Za-z0-9_+/=-]{16,}' adlc/index.html; then
+            echo "Potential hard-coded secret detected. Review the match."
+            exit 1
+          fi
+          echo "No obvious hard-coded secret pattern found in frontend source."
