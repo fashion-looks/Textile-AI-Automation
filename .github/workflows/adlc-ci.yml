@@ -1,0 +1,42 @@
+name: ADLC quality checks
+on:
+  push:
+    paths:
+      - "adlc/**"
+      - ".github/workflows/adlc-ci.yml"
+  pull_request:
+    paths:
+      - "adlc/**"
+      - ".github/workflows/adlc-ci.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    name: Validate ADLC frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate HTML structure and required features
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html = Path("adlc/index.html").read_text(encoding="utf-8")
+          required = ["ADLC orchestration pipeline", "SDLC vs ADLC", "Agent task board", "Production readiness checklist", "localStorage", "Export JSON"]
+          missing = [item for item in required if item not in html]
+          if missing:
+              raise SystemExit("Missing required content: " + ", ".join(missing))
+          if html.count("<script>") != 1 or html.count("</script>") != 1:
+              raise SystemExit("Expected one inline application script")
+          print("ADLC frontend content checks passed.")
+          PY
+      - name: Check inline JavaScript syntax
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("adlc/index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script>(.*?)</script>", html, re.S)
+          Path("/tmp/adlc-app.js").write_text("\n".join(scripts), encoding="utf-8")
+          PY
+          node --check /tmp/adlc-app.js
