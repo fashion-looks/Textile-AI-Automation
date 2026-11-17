@@ -6,7 +6,7 @@ import os
 from urllib.parse import urlparse
 
 from .catalog import inventory
-from .purchase_orders import assess_purchase_order
+from .purchase_orders import assess_purchase_order, assess_purchase_order_batch
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
 HOST = os.getenv("HOST", "127.0.0.1")
@@ -38,13 +38,17 @@ class Handler(BaseHTTPRequestHandler):
                     "/health",
                     "/api/categories",
                     "/api/purchase-orders/assess",
+                    "/api/purchase-orders/assess-batch",
                 ],
             })
         return self._send(404, {"error": "not_found"})
 
     def do_POST(self):
         path = urlparse(self.path).path
-        if path != "/api/purchase-orders/assess":
+        if path not in {
+            "/api/purchase-orders/assess",
+            "/api/purchase-orders/assess-batch",
+        }:
             return self._send(404, {"error": "not_found"})
 
         content_type = self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
@@ -68,10 +72,18 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(400, {"error": "invalid_json"})
 
         try:
+            if path == "/api/purchase-orders/assess-batch":
+                assessment = assess_purchase_order_batch(payload)
+                return self._send(200, {"batch": assessment})
             assessment = assess_purchase_order(payload)
         except ValueError as error:
+            error_code = (
+                "invalid_purchase_order_batch"
+                if path == "/api/purchase-orders/assess-batch"
+                else "invalid_purchase_order"
+            )
             return self._send(400, {
-                "error": "invalid_purchase_order",
+                "error": error_code,
                 "message": str(error),
             })
         return self._send(200, {"assessment": assessment})
