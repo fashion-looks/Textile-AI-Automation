@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 from .catalog import inventory
 from .purchase_orders import assess_purchase_order, assess_purchase_order_batch
 from .supplier_performance import summarize_supplier_performance
+from .certification_expiry import assess_certificate_batch
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
 HOST = os.getenv("HOST", "127.0.0.1")
@@ -41,6 +42,7 @@ class Handler(BaseHTTPRequestHandler):
                     "/api/purchase-orders/assess",
                     "/api/purchase-orders/assess-batch",
                     "/api/suppliers/performance",
+                    "/api/certifications/assess-batch",
                 ],
             })
         return self._send(404, {"error": "not_found"})
@@ -51,6 +53,7 @@ class Handler(BaseHTTPRequestHandler):
             "/api/purchase-orders/assess",
             "/api/purchase-orders/assess-batch",
             "/api/suppliers/performance",
+            "/api/certifications/assess-batch",
         }:
             return self._send(404, {"error": "not_found"})
 
@@ -81,12 +84,17 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/suppliers/performance":
                 report = summarize_supplier_performance(payload)
                 return self._send(200, {"supplier_performance": report})
+            if path == "/api/certifications/assess-batch":
+                report = assess_certificate_batch(payload)
+                return self._send(200, {"certification_expiry": report})
             assessment = assess_purchase_order(payload)
         except ValueError as error:
             if path == "/api/purchase-orders/assess-batch":
                 error_code = "invalid_purchase_order_batch"
             elif path == "/api/suppliers/performance":
                 error_code = "invalid_supplier_performance_request"
+            elif path == "/api/certifications/assess-batch":
+                error_code = "invalid_certification_expiry_request"
             else:
                 error_code = "invalid_purchase_order"
             return self._send(400, {
