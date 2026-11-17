@@ -22,6 +22,15 @@ class EcosystemApiTests(unittest.TestCase):
         cls.server.server_close()
         cls.thread.join(timeout=2)
 
+    def post_json(self, path, payload):
+        request = Request(
+            self.base + path,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        return urlopen(request)
+
     def test_health(self):
         with urlopen(self.base + "/health") as response:
             self.assertEqual(response.status, 200)
@@ -42,17 +51,59 @@ class EcosystemApiTests(unittest.TestCase):
             "received_qty": 1500,
             "committed_delivery_date": "2099-12-31",
         }
-        request = Request(
-            self.base + "/api/purchase-orders/assess",
-            data=json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        with urlopen(request) as response:
+        with self.post_json("/api/purchase-orders/assess", payload) as response:
             body = json.load(response)
         self.assertEqual(response.status, 200)
         self.assertEqual(body["assessment"]["balance_qty"], 3500)
         self.assertEqual(body["assessment"]["status"], "in_progress")
+
+    def test_batch_assessment_returns_valid_and_invalid_rows(self):
+        payload = {
+            "purchase_orders": [
+                {
+                    "po_number": "FL-PO-2001",
+                    "supplier": "Mill One",
+                    "order_qty": 1000,
+                    "received_qty": 250,
+                    "committed_delivery_date": "2099-12-31",
+                },
+                {
+                    "po_number": "FL-PO-2002",
+                    "supplier": "Mill Two",
+                    "order_qty": 100,
+                    "received_qty": 101,
+                    "committed_delivery_date": "2099-12-31",
+                },
+                {
+                    "po_number": "FL-PO-2003",
+                    "supplier": "Mill Three",
+                    "order_qty": 500,
+                    "received_qty": 0,
+                    "committed_delivery_date": "2000-01-01",
+                },
+            ]
+        }
+        with self.post_json("/api/purchase-orders/assess-batch", payload) as response:
+            body = json.load(response)["batch"]
+        self.assertEqual(body["total"], 3)
+        self.assertEqual(body["valid"], 2)
+        self.assertEqual(body["invalid"], 1)
+        self.assertEqual(body["results"][0]["assessment"]["balance_qty"], 750)
+        self.assertEqual(body["results"][1]["status"], "invalid")
+        self.assertEqual(body["results"][2]["status"], "overdue")
+
+    def test_batch_assessment_rejects_empty_or_oversized_item_list(self):
+        for orders in ([], [{}] * 51):
+            with self.subTest(count=len(orders)):
+                with self.assertRaises(HTTPError) as error:
+                    self.post_json("/api/purchase-orders/assess-batch", {
+                        "purchase_orders": orders
+                    })
+                self.assertEqual(error.exception.code, 400)
+                self.assertEqual(
+                    json.load(error.exception)["error"],
+                    "invalid_purchase_order_batch",
+                )
 
     def test_assessment_rejects_invalid_quantities(self):
         payload = {
@@ -62,14 +113,8 @@ class EcosystemApiTests(unittest.TestCase):
             "received_qty": 101,
             "committed_delivery_date": "2099-12-31",
         }
-        request = Request(
-            self.base + "/api/purchase-orders/assess",
-            data=json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
         with self.assertRaises(HTTPError) as error:
-            urlopen(request)
+            self.post_json("/api/purchase-orders/assess", payload)
         self.assertEqual(error.exception.code, 400)
         self.assertEqual(json.load(error.exception)["error"], "invalid_purchase_order")
 
