@@ -8,6 +8,7 @@ from decimal import Decimal, InvalidOperation
 
 _QUANTUM = Decimal("0.001")
 _MAX_QUANTITY = Decimal("1000000000000")
+MAX_BATCH_ITEMS = 50
 
 
 def _text(payload, field, *, required=False, limit=120):
@@ -104,4 +105,59 @@ def assess_purchase_order(payload, *, today=None):
         "committed_delivery_date": due_date.isoformat(),
         "overdue_days": overdue_days,
         "status": status,
+    }
+
+
+def assess_purchase_order_batch(payload, *, today=None):
+    """Assess 1–50 purchase orders, returning per-row validation results.
+
+    Invalid rows do not discard valid rows. The function remains stateless.
+    """
+    if not isinstance(payload, dict):
+        raise ValueError("request body must be a JSON object")
+
+    orders = payload.get("purchase_orders")
+    if not isinstance(orders, list):
+        raise ValueError("purchase_orders must be a list")
+    if not 1 <= len(orders) <= MAX_BATCH_ITEMS:
+        raise ValueError(
+            f"purchase_orders must contain between 1 and {MAX_BATCH_ITEMS} items"
+        )
+
+    summary = {
+        "complete": 0,
+        "overdue": 0,
+        "due_today": 0,
+        "in_progress": 0,
+        "pending": 0,
+        "invalid": 0,
+    }
+    results = []
+
+    for index, order in enumerate(orders):
+        try:
+            assessment = assess_purchase_order(order, today=today)
+        except ValueError as error:
+            summary["invalid"] += 1
+            results.append({
+                "index": index,
+                "status": "invalid",
+                "error": str(error),
+            })
+            continue
+
+        status = assessment["status"]
+        summary[status] += 1
+        results.append({
+            "index": index,
+            "status": status,
+            "assessment": assessment,
+        })
+
+    return {
+        "total": len(orders),
+        "valid": len(orders) - summary["invalid"],
+        "invalid": summary["invalid"],
+        "summary": summary,
+        "results": results,
     }
