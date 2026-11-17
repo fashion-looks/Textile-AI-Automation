@@ -105,6 +105,61 @@ class EcosystemApiTests(unittest.TestCase):
                     "invalid_purchase_order_batch",
                 )
 
+    def test_supplier_performance_endpoint(self):
+        payload = {
+            "purchase_orders": [
+                {
+                    "po_number": "FL-SP-1",
+                    "supplier": "Mill A",
+                    "order_qty": 1000,
+                    "received_qty": 1000,
+                    "committed_delivery_date": "2000-01-02",
+                    "actual_delivery_date": "2000-01-01",
+                },
+                {
+                    "po_number": "FL-SP-2",
+                    "supplier": "Mill A",
+                    "order_qty": 1000,
+                    "received_qty": 1000,
+                    "committed_delivery_date": "2000-01-02",
+                    "actual_delivery_date": "2000-01-05",
+                },
+                {
+                    "po_number": "FL-SP-3",
+                    "supplier": "Mill A",
+                    "order_qty": 500,
+                    "received_qty": 250,
+                    "committed_delivery_date": "2000-01-02",
+                },
+            ]
+        }
+        with self.post_json("/api/suppliers/performance", payload) as response:
+            body = json.load(response)["supplier_performance"]
+        self.assertEqual(body["total_suppliers"], 1)
+        supplier = body["suppliers"][0]
+        self.assertEqual(supplier["on_time_delivery_rate_pct"], 50.0)
+        self.assertEqual(supplier["average_late_days"], 3.0)
+        self.assertEqual(supplier["overdue_open_pos"], 1)
+
+    def test_supplier_performance_endpoint_rejects_duplicate_pos(self):
+        order = {
+            "po_number": "FL-SP-1",
+            "supplier": "Mill A",
+            "order_qty": 100,
+            "received_qty": 100,
+            "committed_delivery_date": "2000-01-02",
+            "actual_delivery_date": "2000-01-02",
+        }
+        with self.assertRaises(HTTPError) as error:
+            self.post_json("/api/suppliers/performance", {
+                "purchase_orders": [order, {**order, "supplier": "Mill B"}]
+            })
+        self.assertEqual(error.exception.code, 400)
+        self.assertEqual(
+            json.load(error.exception)["error"],
+            "invalid_supplier_performance_request",
+        )
+
     def test_assessment_rejects_invalid_quantities(self):
         payload = {
             "po_number": "FL-PO-1003",

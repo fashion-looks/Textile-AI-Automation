@@ -7,6 +7,7 @@ from urllib.parse import urlparse
 
 from .catalog import inventory
 from .purchase_orders import assess_purchase_order, assess_purchase_order_batch
+from .supplier_performance import summarize_supplier_performance
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
 HOST = os.getenv("HOST", "127.0.0.1")
@@ -39,6 +40,7 @@ class Handler(BaseHTTPRequestHandler):
                     "/api/categories",
                     "/api/purchase-orders/assess",
                     "/api/purchase-orders/assess-batch",
+                    "/api/suppliers/performance",
                 ],
             })
         return self._send(404, {"error": "not_found"})
@@ -48,6 +50,7 @@ class Handler(BaseHTTPRequestHandler):
         if path not in {
             "/api/purchase-orders/assess",
             "/api/purchase-orders/assess-batch",
+            "/api/suppliers/performance",
         }:
             return self._send(404, {"error": "not_found"})
 
@@ -75,13 +78,17 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/purchase-orders/assess-batch":
                 assessment = assess_purchase_order_batch(payload)
                 return self._send(200, {"batch": assessment})
+            if path == "/api/suppliers/performance":
+                report = summarize_supplier_performance(payload)
+                return self._send(200, {"supplier_performance": report})
             assessment = assess_purchase_order(payload)
         except ValueError as error:
-            error_code = (
-                "invalid_purchase_order_batch"
-                if path == "/api/purchase-orders/assess-batch"
-                else "invalid_purchase_order"
-            )
+            if path == "/api/purchase-orders/assess-batch":
+                error_code = "invalid_purchase_order_batch"
+            elif path == "/api/suppliers/performance":
+                error_code = "invalid_supplier_performance_request"
+            else:
+                error_code = "invalid_purchase_order"
             return self._send(400, {
                 "error": error_code,
                 "message": str(error),
