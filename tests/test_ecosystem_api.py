@@ -160,6 +160,52 @@ class EcosystemApiTests(unittest.TestCase):
             "invalid_supplier_performance_request",
         )
 
+    def test_certification_expiry_batch_endpoint(self):
+        payload = {
+            "warning_days": 30,
+            "certificates": [
+                {
+                    "company": "Example Textile Mill",
+                    "standard": "GOTS",
+                    "certificate_number": "GOTS-API-001",
+                    "issue_date": "2026-01-01",
+                    "expiry_date": "2026-12-01",
+                },
+                {
+                    "company": "Example Textile Mill",
+                    "standard": "GRS",
+                    "certificate_number": "GRS-API-002",
+                    "issue_date": "2025-01-01",
+                    "expiry_date": "2026-11-01",
+                },
+            ],
+        }
+        with self.post_json("/api/certifications/assess-batch", payload) as response:
+            body = json.load(response)["certification_expiry"]
+            self.assertEqual(response.headers["Cache-Control"], "no-store")
+            self.assertEqual(response.headers["X-Content-Type-Options"], "nosniff")
+        self.assertEqual(response.status, 200)
+        self.assertEqual(body["summary"]["expiring_soon"], 1)
+        self.assertEqual(body["summary"]["expired"], 1)
+
+    def test_certification_expiry_endpoint_rejects_invalid_warning_window(self):
+        with self.assertRaises(HTTPError) as error:
+            self.post_json("/api/certifications/assess-batch", {
+                "warning_days": 500,
+                "certificates": [{
+                    "company": "Example Mill",
+                    "standard": "GOTS",
+                    "certificate_number": "GOTS-API-003",
+                    "issue_date": "2026-01-01",
+                    "expiry_date": "2027-01-01",
+                }],
+            })
+        self.assertEqual(error.exception.code, 400)
+        self.assertEqual(
+            json.load(error.exception)["error"],
+            "invalid_certification_expiry_request",
+        )
+
     def test_assessment_rejects_invalid_quantities(self):
         payload = {
             "po_number": "FL-PO-1003",
