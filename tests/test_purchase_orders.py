@@ -1,7 +1,7 @@
 import unittest
 from datetime import date
 
-from ecosystem.purchase_orders import assess_purchase_order
+from ecosystem.purchase_orders import assess_purchase_order, assess_purchase_order_batch
 
 
 class PurchaseOrderAssessmentTests(unittest.TestCase):
@@ -63,6 +63,32 @@ class PurchaseOrderAssessmentTests(unittest.TestCase):
     def test_rejects_non_object_payload(self):
         with self.assertRaisesRegex(ValueError, "JSON object"):
             assess_purchase_order([], today=date(2026, 11, 17))
+
+    def test_batch_preserves_order_and_summarizes_mixed_rows(self):
+        payload = {
+            "purchase_orders": [
+                self.payload,
+                {**self.payload, "po_number": "FL-PO-INVALID", "received_qty": 10001},
+                {**self.payload, "po_number": "FL-PO-OVERDUE"},
+            ]
+        }
+        result = assess_purchase_order_batch(payload, today=date(2026, 11, 23))
+        self.assertEqual(result["total"], 3)
+        self.assertEqual(result["valid"], 2)
+        self.assertEqual(result["invalid"], 1)
+        self.assertEqual(result["results"][0]["index"], 0)
+        self.assertEqual(result["results"][1]["status"], "invalid")
+        self.assertEqual(result["summary"]["overdue"], 2)
+
+    def test_batch_rejects_missing_empty_and_too_many_orders(self):
+        for payload in (
+            {},
+            {"purchase_orders": []},
+            {"purchase_orders": [{}] * 51},
+        ):
+            with self.subTest(payload_keys=list(payload)):
+                with self.assertRaises(ValueError):
+                    assess_purchase_order_batch(payload, today=date(2026, 11, 17))
 
 
 if __name__ == "__main__":
